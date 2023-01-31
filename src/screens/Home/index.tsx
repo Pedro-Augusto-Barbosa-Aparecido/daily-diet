@@ -3,36 +3,30 @@ import { Plus } from "phosphor-react-native";
 import { Button } from "@components/Button";
 import { Header } from "@components/Header";
 
-import {
-  Container,
-  Icon,
-  Percentage,
-  PercentageContainer,
-  Span,
-  SubTitle,
-} from "./styles";
+import { Container, Icon, Span } from "./styles";
 
 import { useTheme } from "styled-components/native";
 import { SectionList } from "react-native";
 import { MealTitle } from "@components/Meal/styles";
 import { Meal } from "@components/Meal";
 import { ListEmpty } from "@components/ListEmpty";
+import { Card } from "@components/Card";
 
 export function Home() {
   const {
-    COLORS: { WHITE },
+    COLORS: { WHITE, GREEN_LIGHT },
   } = useTheme();
 
   const DATA = [
-    // {
-    //   title: "12.08.22",
-    //   data: [
-    //     { id: "kncal", text: "kbacla" },
-    //     { id: "kncalca", text: "ascakbacla" },
-    //     { id: "kncalcaasx", text: "ascakbacla" },
-    //     { id: "kncalcasxaa", text: "ascakbacla" },
-    //   ],
-    // },
+    {
+      title: "12.08.22",
+      data: [
+        { id: "kncal", text: "kbacla" },
+        { id: "kncalca", text: "ascakbacla" },
+        { id: "kncalcaasx", text: "ascakbacla" },
+        { id: "kncalcasxaa", text: "ascakbacla" },
+      ],
+    },
     // {
     //   title: "12.09.22",
     //   data: [
@@ -49,11 +43,12 @@ export function Home() {
   return (
     <Container>
       <Header />
-      <PercentageContainer>
-        <Percentage>90,86%</Percentage>
-        <SubTitle>das refeições dentro da dieta</SubTitle>
-        <Icon />
-      </PercentageContainer>
+      <Card
+        title="90,86%"
+        subtitle="das refeições dentro da dieta"
+        icon={<Icon />}
+        backgroundColor={GREEN_LIGHT}
+      />
       <Span>Refeições</Span>
       <Button
         title="Nova refeição"
