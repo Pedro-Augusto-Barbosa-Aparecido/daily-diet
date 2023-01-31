@@ -1,13 +1,12 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  flex: 1;
   flex-direction: row;
 
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
 
-  padding: 64px 24px;
+  padding-top: 64px;
 `;
 
 export const Avatar = styled.Image`
@@ -16,5 +15,5 @@ export const Avatar = styled.Image`
 
   border-radius: 9999px;
 
-  border: 2px solid ${({ theme }) => theme.COLORS.GARY_200};
+  border: 2px solid ${({ theme }) => theme.COLORS.GRAY_200};
 `;
