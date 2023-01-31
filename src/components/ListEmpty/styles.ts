@@ -1,3 +1,4 @@
+import { Placeholder } from "phosphor-react-native";
 import styled, { css } from "styled-components/native";
 
 export const Container = styled.View`
@@ -15,4 +16,11 @@ export const Message = styled.Text`
   `};
 
   text-align: center;
+`;
+
+export const Icon = styled(Placeholder).attrs(({ theme }) => ({
+  color: theme.COLORS.GRAY_600,
+  size: 96,
+}))`
+  margin-top: 32px;
 `;
