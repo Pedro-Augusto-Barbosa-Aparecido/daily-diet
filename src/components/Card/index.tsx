@@ -3,10 +3,11 @@ import React from "react";
 import { ViewStyle } from "react-native";
 import { Container, SubTitle, Title } from "./styles";
 
-type Props = ViewStyle & {
+type Props = {
   title: string;
   subtitle: string;
   icon?: React.ReactNode;
+  style: ViewStyle;
 };
 
 export function Card(props: Props) {

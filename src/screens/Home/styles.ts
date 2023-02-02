@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "phosphor-react-native";
+import { TouchableOpacity } from "react-native";
 import styled, { css } from "styled-components/native";
 
 export const Container = styled.View`
@@ -45,7 +46,12 @@ export const SubTitle = styled.Text`
 export const Icon = styled(ArrowUpRight).attrs(({ theme }) => ({
   color: theme.COLORS.GREEN_DARK,
   size: 24,
-}))`
+}))``;
+
+export const ButtonIcon = styled(TouchableOpacity)`
+  align-items: center;
+  justify-content: center;
+
   position: absolute;
 
   top: 8px;
