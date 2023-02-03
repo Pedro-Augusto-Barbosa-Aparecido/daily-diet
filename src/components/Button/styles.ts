@@ -1,8 +1,8 @@
-import { TouchableOpacity } from "react-native";
+import { MotiView } from "moti";
 
 import styled, { css } from "styled-components/native";
 
-export const Container = styled(TouchableOpacity)`
+export const Container = styled(MotiView)`
   ${({ theme }) => css`
     background-color: ${theme.COLORS.GRAY_200};
   `};

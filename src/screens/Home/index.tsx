@@ -12,10 +12,15 @@ import { Meal } from "@components/Meal";
 import { ListEmpty } from "@components/ListEmpty";
 import { Card } from "@components/Card";
 import { useNavigation } from "@react-navigation/native";
+import { DietContext } from "@context/DietContext";
+
+import { useContext } from "react";
 
 export function Home() {
   const { COLORS: colors } = useTheme();
   const { navigate } = useNavigation();
+
+  const { isOutOfDiet, progressInDiet } = useContext(DietContext);
 
   const DATA = [
     {
@@ -44,7 +49,7 @@ export function Home() {
     <Container>
       <Header />
       <Card
-        title="90,86%"
+        title={`${progressInDiet}%`}
         subtitle="das refeições dentro da dieta"
         icon={
           <ButtonIcon onPress={() => navigate("resume")} activeOpacity={0.8}>
@@ -52,14 +57,14 @@ export function Home() {
           </ButtonIcon>
         }
         style={{
-          backgroundColor: colors.GREEN_LIGHT,
+          backgroundColor: isOutOfDiet ? colors.RED_LIGTH : colors.GREEN_LIGHT,
         }}
       />
       <Span>Refeições</Span>
       <Button
         title="Nova refeição"
         icon={<Plus color={colors.WHITE} size={24} />}
-        onPress={() => {}}
+        onPress={() => navigate("newMeal")}
       />
 
       <SectionList

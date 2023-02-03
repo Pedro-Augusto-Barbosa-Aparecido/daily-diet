@@ -3,8 +3,13 @@ import Animated from "react-native-reanimated";
 
 import styled, { css } from "styled-components/native";
 
-export const Container = styled.View`
-  background-color: ${({ theme }) => theme.COLORS.GREEN_LIGHT};
+type ResumeProps = {
+  outOfDiet?: boolean;
+};
+
+export const Container = styled.View<ResumeProps>`
+  background-color: ${({ theme, outOfDiet = false }) =>
+    outOfDiet ? theme.COLORS.RED_LIGTH : theme.COLORS.GREEN_LIGHT};
 
   flex: 1;
 

@@ -13,6 +13,8 @@ import {
   NunitoSans_700Bold,
 } from "@expo-google-fonts/nunito-sans";
 
+import { DietProvider } from "@context/DietContext";
+
 export default function App() {
   const [isFontsLoaded] = useFonts({
     NunitoSans_400Regular,
@@ -20,9 +22,11 @@ export default function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      {isFontsLoaded ? <Route /> : <Loading />}
-      <StatusBar backgroundColor="transparent" translucent style="dark" />
-    </ThemeProvider>
+    <DietProvider>
+      <ThemeProvider theme={theme}>
+        {isFontsLoaded ? <Route /> : <Loading />}
+        <StatusBar backgroundColor="transparent" translucent style="dark" />
+      </ThemeProvider>
+    </DietProvider>
   );
 }
