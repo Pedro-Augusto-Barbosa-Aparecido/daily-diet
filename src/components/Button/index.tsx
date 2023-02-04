@@ -1,15 +1,25 @@
 import React from "react";
 import { useAnimationState } from "moti";
-import { Pressable, PressableProps } from "react-native";
+import { Pressable, PressableProps, ActivityIndicator } from "react-native";
 
 import { Container, IconContainer, Title } from "./styles";
+import { useTheme } from "styled-components/native";
 
 type Props = Omit<PressableProps, "onPressIn" | "onPressOut"> & {
   title: string;
   icon?: React.ReactNode;
+  isLoading?: boolean;
 };
 
-export function Button({ title, icon, ...rest }: Props) {
+export function Button({
+  title,
+  icon,
+  isLoading = false,
+  disabled = false,
+  ...rest
+}: Props) {
+  const { COLORS: colors } = useTheme();
+
   const buttonAnimated = useAnimationState({
     pressIn: {
       transform: [{ scale: 0.95 }],
@@ -27,11 +37,18 @@ export function Button({ title, icon, ...rest }: Props) {
     <Pressable
       onPressIn={() => handlePressIn("pressIn")}
       onPressOut={() => handlePressIn("pressOut")}
+      disabled={disabled}
       {...rest}
     >
-      <Container state={buttonAnimated}>
-        {icon && <IconContainer>{icon}</IconContainer>}
-        <Title>{title}</Title>
+      <Container disabled={disabled} state={buttonAnimated}>
+        {isLoading ? (
+          <ActivityIndicator size={20} color={colors.GRAY_600} />
+        ) : (
+          <>
+            {icon && <IconContainer>{icon}</IconContainer>}
+            <Title>{title}</Title>
+          </>
+        )}
       </Container>
     </Pressable>
   );

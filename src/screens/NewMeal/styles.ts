@@ -12,7 +12,7 @@ export const TopBar = styled(Animated.View)`
   padding: 40px 24px 24px;
 `;
 
-export const Form = styled(Animated.View)`
+export const Form = styled(Animated.ScrollView)`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS.GRAY_700};
 
@@ -20,7 +20,7 @@ export const Form = styled(Animated.View)`
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 
-  padding: 32px 24px 0;
+  padding: 32px 24px 100px;
 `;
 
 export const DateTimerContainer = styled.View`
@@ -54,6 +54,7 @@ export const ToggleButton = styled.Pressable`
 
 type ToggleButtonProps = {
   active?: boolean;
+  type?: "PRIMARY" | "SECONDARY";
 };
 
 export const ToggleButtonContainer = styled(MotiView)<ToggleButtonProps>`
@@ -61,12 +62,23 @@ export const ToggleButtonContainer = styled(MotiView)<ToggleButtonProps>`
 
   flex-direction: row;
 
-  border: 1px solid transparent;
+  ${({ theme, active = false, type = "PRIMARY" }) => css`
+    background-color: ${active
+      ? type === "PRIMARY"
+        ? theme.COLORS.GREEN_LIGHT
+        : theme.COLORS.RED_LIGTH
+      : theme.COLORS.GRAY_600};
+    border: 1px solid
+      ${active
+        ? type === "PRIMARY"
+          ? theme.COLORS.GREEN_DARK
+          : theme.COLORS.RED_DARK
+        : "transparent"};
+  `};
+
   border-radius: 6px;
 
   height: 50px;
-
-  background-color: ${({ theme }) => theme.COLORS.GRAY_600};
 
   justify-content: center;
   align-items: center;

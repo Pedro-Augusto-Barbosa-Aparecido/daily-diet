@@ -1,16 +1,32 @@
-import { TextInputProps, ViewStyle } from "react-native";
-import { Container, Input, Label } from "./styles";
+import { useState } from "react";
 
-type Props = TextInputProps & {
+import { TextInputProps, ViewStyle } from "react-native";
+import { BounceIn, FadeOut } from "react-native-reanimated";
+import { Container, Error, ErrorContainer, Input, Label } from "./styles";
+
+type Props = Omit<TextInputProps, "onFocus" | "onBlur"> & {
   label?: string;
   parentStyle?: ViewStyle;
+  error?: string;
 };
 
-export function TextInput({ label, parentStyle, ...rest }: Props) {
+export function TextInput({ label, parentStyle, error, ...rest }: Props) {
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
   return (
     <Container {...parentStyle}>
       <Label>{label}</Label>
-      <Input {...rest} />
+      <Input
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
+        isFocus={isFocus}
+        {...rest}
+      />
+      {!!error && (
+        <ErrorContainer entering={BounceIn} exiting={FadeOut}>
+          <Error>{error}</Error>
+        </ErrorContainer>
+      )}
     </Container>
   );
 }

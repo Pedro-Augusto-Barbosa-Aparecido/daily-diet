@@ -2,9 +2,15 @@ import { MotiView } from "moti";
 
 import styled, { css } from "styled-components/native";
 
-export const Container = styled(MotiView)`
-  ${({ theme }) => css`
-    background-color: ${theme.COLORS.GRAY_200};
+type ButtonStyleProps = {
+  disabled?: boolean | null;
+};
+
+export const Container = styled(MotiView)<ButtonStyleProps>`
+  ${({ theme, disabled = false }) => css`
+    background-color: ${disabled
+      ? theme.COLORS.GRAY_200
+      : theme.COLORS.GRAY_100};
   `};
 
   flex-direction: row;
