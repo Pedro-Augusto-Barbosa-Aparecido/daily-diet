@@ -31,7 +31,7 @@ export function NavigationHeader({ title, showTitle = false }: Props) {
   return (
     <NavigationHeaderContainer>
       <TouchableOpacity onPress={goBack} style={{ width: 30 }}>
-        <ButtonBack />
+        <ButtonBack weight="bold" />
       </TouchableOpacity>
       {showTitle && <Title>{title}</Title>}
     </NavigationHeaderContainer>
