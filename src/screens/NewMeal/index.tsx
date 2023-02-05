@@ -27,11 +27,17 @@ import { registerNewMeal } from "@storage/meal/registerNewMeal";
 import { useNavigation } from "@react-navigation/native";
 
 export function NewMeal() {
+  const today = dayjs();
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-  const [hour, setHour] = useState<string>("");
+  const [date, setDate] = useState<string>(
+    `${today.get("day")}/${today.get("month")}/${today.get("year")}`
+  );
+  const [hour, setHour] = useState<string>(
+    `${today.get("hour")}:${today.get("minute")}`
+  );
   const [isInDiet, setIsInDiet] = useState<"yes" | "no" | null>(null);
 
   const { navigate } = useNavigation();
