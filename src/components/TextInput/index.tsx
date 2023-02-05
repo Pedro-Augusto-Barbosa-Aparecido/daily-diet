@@ -4,7 +4,7 @@ import { TextInputProps, ViewStyle } from "react-native";
 import { BounceIn, FadeOut } from "react-native-reanimated";
 import { Container, Error, ErrorContainer, Input, Label } from "./styles";
 
-type Props = Omit<TextInputProps, "onFocus" | "onBlur"> & {
+type Props = TextInputProps & {
   label?: string;
   parentStyle?: ViewStyle;
   error?: string;

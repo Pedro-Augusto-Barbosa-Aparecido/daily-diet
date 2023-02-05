@@ -11,7 +11,8 @@
       "@storage/*": ["./src/storage/*"],
       "@context/*": ["./src/context/*"],
       "@theme/*": ["./src/theme/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@lib/*": ["./src/lib/*"]
     }
   }
 }

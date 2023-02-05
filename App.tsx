@@ -7,6 +7,8 @@ import { ThemeProvider } from "styled-components/native";
 
 import { Route } from "@routes";
 
+import "@lib/dayjs";
+
 import {
   useFonts,
   NunitoSans_400Regular,
