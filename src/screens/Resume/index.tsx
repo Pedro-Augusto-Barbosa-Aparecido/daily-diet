@@ -1,7 +1,10 @@
 import { Card } from "@components/Card";
 import { NavigationHeader } from "@components/Header";
-import { DietContext } from "@context/DietContext";
-import { useContext } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { getPercentageInDiet } from "@storage/meal/getPercentageInDiet";
+import { getResumeOfDiet as getResume } from "@storage/meal/getResumeOfDiet";
+import { useCallback, useState } from "react";
+import { Alert } from "react-native";
 import { SlideInDown, SlideInUp } from "react-native-reanimated";
 import { useTheme } from "styled-components/native";
 import {
@@ -14,10 +17,37 @@ import {
   TopBar,
 } from "./styles";
 
+interface IResume {
+  bestSequency: number;
+  numberOfMealRegistred: number;
+  mealsInDiet: number;
+  mealsOutDiet: number;
+}
+
 export function Resume() {
   const { COLORS: colors } = useTheme();
+  const [progressInDiet, setProgressInDiet] = useState<number>(0);
+  const [resume, setResume] = useState<IResume | null>(null);
 
-  const { isOutOfDiet, progressInDiet } = useContext(DietContext);
+  async function getResumeOfDiets() {
+    try {
+      const percentage = (await getPercentageInDiet()) ?? 0;
+      const resumeOfDiet = await getResume();
+
+      setResume(resumeOfDiet);
+      setProgressInDiet(percentage);
+    } catch (error) {
+      Alert.alert("Resumo", "Houve um erro ao tentar buscar o resumo da dieta");
+    }
+  }
+
+  const isOutOfDiet = progressInDiet <= 60;
+
+  useFocusEffect(
+    useCallback(() => {
+      getResumeOfDiets();
+    }, [])
+  );
 
   return (
     <Container outOfDiet={isOutOfDiet}>
@@ -29,7 +59,7 @@ export function Resume() {
       <Statistics entering={SlideInDown.delay(100).duration(700)}>
         <StatiticsTitle>Estatísticas gerais</StatiticsTitle>
         <Card
-          title="22"
+          title={String(resume?.bestSequency ?? "0")}
           subtitle="melhor sequência de pratos dentro da dieta"
           style={{
             backgroundColor: colors.GRAY_600,
@@ -37,7 +67,7 @@ export function Resume() {
           }}
         />
         <Card
-          title="109"
+          title={String(resume?.numberOfMealRegistred ?? "0")}
           subtitle="refeições registradas"
           style={{
             backgroundColor: colors.GRAY_600,
@@ -46,7 +76,7 @@ export function Resume() {
         />
         <StatisticsRowContainer>
           <Card
-            title="99"
+            title={String(resume?.mealsInDiet ?? "0")}
             subtitle="refeições dentro da dieta"
             style={{
               backgroundColor: colors.GREEN_LIGHT,
@@ -56,7 +86,7 @@ export function Resume() {
             }}
           />
           <Card
-            title="10"
+            title={String(resume?.mealsOutDiet ?? "0")}
             subtitle="refeições fora da dieta"
             style={{
               backgroundColor: colors.RED_LIGTH,
