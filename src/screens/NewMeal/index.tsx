@@ -107,7 +107,7 @@ export function NewMeal() {
         hour,
       });
 
-      navigate("home");
+      navigate("registerCongratulation", { inDiet: isInDiet === "yes" });
     } catch (err) {
       Alert.alert("Criação", "Não foi possível criar a refeição!");
       console.log(err);

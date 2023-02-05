@@ -4,6 +4,9 @@ export declare global {
       home: undefined;
       resume: undefined;
       newMeal: undefined;
+      registerCongratulation: {
+        inDiet: boolean;
+      }
     }
   }
 }
