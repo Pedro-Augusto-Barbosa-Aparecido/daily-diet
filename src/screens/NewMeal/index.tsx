@@ -23,6 +23,8 @@ import {
   ToggleContainer,
   TopBar,
 } from "./styles";
+import { registerNewMeal } from "@storage/meal/registerNewMeal";
+import { useNavigation } from "@react-navigation/native";
 
 export function NewMeal() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -31,6 +33,8 @@ export function NewMeal() {
   const [date, setDate] = useState<string>("");
   const [hour, setHour] = useState<string>("");
   const [isInDiet, setIsInDiet] = useState<"yes" | "no" | null>(null);
+
+  const { navigate } = useNavigation();
 
   const buttonAnimatedYes = useAnimationState({
     pressIn: {
@@ -50,8 +54,8 @@ export function NewMeal() {
     },
   });
 
-  function handleCreateNewMeal() {
-    if (name.length === 0) {
+  async function handleCreateNewMeal() {
+    if (name.trim().length === 0) {
       return Alert.alert(
         "Nova Refeição",
         "Insira o nome do prato que você comeu"
@@ -82,7 +86,7 @@ export function NewMeal() {
         return Alert.alert("Nova Refeição", "Data inválida!");
       }
 
-      if (!mealDate.isToday()) {
+      if (mealDate.isBefore(dayjs(new Date()).startOf("date"))) {
         return Alert.alert(
           "Nova Refeição",
           "Data inválida! Colouqe a data de hoje"
@@ -94,6 +98,16 @@ export function NewMeal() {
       if (hours > 23 || minutes > 59) {
         return Alert.alert("Nova refeição", "Horário inválido");
       }
+
+      await registerNewMeal({
+        name,
+        date,
+        isInDiet: isInDiet === "yes",
+        description,
+        hour,
+      });
+
+      navigate("home");
     } catch (err) {
       Alert.alert("Criação", "Não foi possível criar a refeição!");
       console.log(err);
@@ -119,7 +133,7 @@ export function NewMeal() {
         <TextInput
           label="Nome"
           value={name}
-          onChangeText={(text) => setName(text.trim())}
+          onChangeText={(text) => setName(text)}
           placeholder="Nome do prato..."
           keyboardAppearance="dark"
         />
@@ -130,7 +144,7 @@ export function NewMeal() {
           textAlignVertical="top"
           style={{ height: 120 }}
           value={description}
-          onChangeText={(text) => setDescription(text.trim())}
+          onChangeText={(text) => setDescription(text)}
           placeholder="Descrição da refeição..."
           keyboardAppearance="dark"
         />

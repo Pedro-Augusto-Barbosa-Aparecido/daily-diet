@@ -6,44 +6,66 @@ import { Header } from "@components/Header";
 import { ButtonIcon, Container, Icon, Span } from "./styles";
 
 import { useTheme } from "styled-components/native";
-import { SectionList } from "react-native";
+import { SectionList, Alert } from "react-native";
 import { MealTitle } from "@components/Meal/styles";
 import { Meal } from "@components/Meal";
 import { ListEmpty } from "@components/ListEmpty";
 import { Card } from "@components/Card";
-import { useNavigation } from "@react-navigation/native";
-import { DietContext } from "@context/DietContext";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import { useContext } from "react";
+import { useCallback, useState } from "react";
+import { getMeals } from "@storage/meal/getMeals";
+import { getPercentageInDiet } from "@storage/meal/getPercentageInDiet";
+
+interface IMeal {
+  id: string;
+  name: string;
+  description: string;
+  isInDiet: boolean;
+  date: string;
+  hour: string;
+}
+
+interface MealList {
+  title: string;
+  data: IMeal[];
+}
 
 export function Home() {
   const { COLORS: colors } = useTheme();
   const { navigate } = useNavigation();
 
-  const { isOutOfDiet, progressInDiet } = useContext(DietContext);
+  const [meals, setMeals] = useState<MealList[] | null>();
+  const [progressInDiet, setProgressInDiet] = useState<number>(0);
 
-  const DATA = [
-    {
-      title: "12.08.22",
-      data: [
-        { id: "kncal", text: "kbacla" },
-        { id: "kncalca", text: "ascakbacla" },
-        { id: "kncalcaasx", text: "ascakbacla" },
-        { id: "kncalcasxaa", text: "ascakbacla" },
-      ],
-    },
-    {
-      title: "12.09.22",
-      data: [
-        { id: "bsfdkncal", text: "kbacla" },
-        { id: "bsfdkncalca", text: "ascakbacla" },
-        { id: "bsfdkncalcaasx", text: "ascakbacla" },
-        { id: "bsfdkncalcasxaa", text: "ascakbacla" },
-        { id: "bsfdkncalca1e21", text: "ascakbacla" },
-        { id: "bsfdkncalca21", text: "ascakbacla" },
-      ],
-    },
-  ];
+  async function fetchMeals() {
+    try {
+      const storage = await getMeals();
+      const percentage = (await getPercentageInDiet()) ?? 0;
+
+      setProgressInDiet(percentage);
+
+      setMeals(
+        storage.map((meal) => ({
+          title: meal.date,
+          data: meal.meals,
+        }))
+      );
+    } catch (error) {
+      Alert.alert(
+        "Busca das Refeições",
+        "Houve um erro ao tentar buscar as refeições, por favor reinicie o aplicativo"
+      );
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchMeals();
+    }, [])
+  );
+
+  const isOutOfDiet = progressInDiet <= 60;
 
   return (
     <Container>
@@ -68,16 +90,16 @@ export function Home() {
       />
 
       <SectionList
-        sections={DATA}
+        sections={meals ?? []}
         contentContainerStyle={{
           paddingBottom: 100,
           // flex: 1,
         }}
-        // style={{ flex: 1 }}
+        style={{ flex: 1 }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Meal prefix="20:00" text={item.text} isOutOfDiet />
+          <Meal prefix="20:00" text={item.name} isOutOfDiet={!item.isInDiet} />
         )}
         renderSectionHeader={({ section: { title } }) => (
           <MealTitle>{title}</MealTitle>
